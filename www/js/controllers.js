@@ -1,6 +1,6 @@
 angular.module('mercury.controllers', ['ionic'])
 
-.controller('AppStart', function($scope, $state, $timeout, $ionicLoading, $ionicHistory ){
+.controller('AppStart', function($scope, $state, $timeout, $ionicLoading, $ionicHistory, hashService ){
 	//user should not be able to Navigate back to the welcome screen 
 	$ionicHistory.nextViewOptions({ 
 		disableBack: true
@@ -31,19 +31,29 @@ angular.module('mercury.controllers', ['ionic'])
 			$ionicHistory.goBack(); 
 		}
 	}, 100);
-	var access_key = 'yyy';
-	var secrete_key = 'xxx'; 
-	var payload = '';
-	//compute signature from the secrete key and payload. ( NB:use HMAC-SHA256 )	
-	var signature = '';
+	//removed actual values of access and secrete key 
+	var access_key = 'xxx';
+	var secrete_key = 'yyy'; 
 	var tonce = Math.round(new Date().getTime()/1000.0); 
+	var payload = 'GET|/api/v1/markets|access_key=' + access_key + '&foo=bar&tonce=' + tonce;
 	
-	 
-	var request_URL = ''; 
+	//compute signature from the secrete key and payload. ( NB:use HMAC SHA-256 )
+	var hashType = 'SHA-256'; 
+	var shaObj = new jsSHA(hashType, "TEXT");
+	shaObj.setHMACKey(access_key, "TEXT");
+	shaObj.update(payload);
+	var signature = shaObj.getHMAC("HEX");
+	
+	
+	console.log(signature); 
+	
+	//valid request needs three authentication parts : access key, signature, server time stamp(Tonce)
+	var request_URL = 'https://bitcoinfundi.com/api/v1/markets?access_key=' + access_key + '&foo=bar&tonce=' + tonce + '&signature=' + signature; 
 	
 	$http.get(request_URL).then(function(response){
 		//'response.data' will contain the result
 		//the JSON file returned with response should set the 
+		console.log('Successful');
 	}, function(err){
 		console.error('ERR', err); 
 		//err.status will contain the status code
