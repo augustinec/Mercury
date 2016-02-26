@@ -1,6 +1,6 @@
 angular.module('mercury.controllers', ['ionic'])
 
-.controller('AppStart', function($scope, $state, $timeout, $ionicLoading, $ionicHistory, hashService ){
+.controller('AppStart', function($scope, $state, $timeout, $ionicLoading, $ionicHistory ){
 	//user should not be able to Navigate back to the welcome screen 
 	$ionicHistory.nextViewOptions({ 
 		disableBack: true
@@ -20,7 +20,7 @@ angular.module('mercury.controllers', ['ionic'])
 .controller('AbstractCtrl', function($scope, $ionicSideMenuDelegate){
 })
 
-.controller('HomeCtrl', function($scope, $state, $http, $ionicPopover, $ionicPlatform, $location, $ionicHistory ){
+.controller('HomeCtrl', function($scope, $state, $http, $ionicPopover, $ionicPopup, $ionicPlatform, $location, $ionicHistory, $templateCache ){
 	//ensure that the back button or function closes the App
 	$ionicPlatform.registerBackButtonAction(function(){
 		var path = $location.path(); 
@@ -31,6 +31,7 @@ angular.module('mercury.controllers', ['ionic'])
 			$ionicHistory.goBack(); 
 		}
 	}, 100);
+	
 	//removed actual values of access and secrete key 
 	var access_key = 'xxx';
 	var secrete_key = 'yyy'; 
@@ -50,14 +51,24 @@ angular.module('mercury.controllers', ['ionic'])
 	//valid request needs three authentication parts : access key, signature, server time stamp(Tonce)
 	var request_URL = 'https://bitcoinfundi.com/api/v1/markets?access_key=' + access_key + '&foo=bar&tonce=' + tonce + '&signature=' + signature; 
 	
-	$http.get(request_URL).then(function(response){
+	$http({method: 'GET', url: request_URL, cache: $templateCache}).
+		then(function(response) {
+			$scope.status = response.status;
+			$scope.data.amount = response.data.ticker.buy;
+		}, function(response) {
+			var alertPopup = $ionicPopup.alert({
+				title: response.status,
+				template: response.data.ticker.last || "Request failed " + response.status
+			});			
+		});
+	/*$http.get('https://docsample.herokuapp.com/jsonSample').then(function(response){
 		//'response.data' will contain the result
 		//the JSON file returned with response should set the 
 		console.log('Successful');
 	}, function(err){
 		console.error('ERR', err); 
 		//err.status will contain the status code
-	}); 
+	}); */
 	
 	//launch the popover for the settings and information link
 	$ionicPopover.fromTemplateUrl('popover.html', {
@@ -81,10 +92,10 @@ angular.module('mercury.controllers', ['ionic'])
 	//data place holders, comment out when GET functional
 	$scope.data = {
 		currency: 'AB', 
-		amount: '0.00'
+		//amount: '0.00'
 	}; 
 	$scope.data.currency = 'USD'; 
-	$scope.data.amount = 789.00 * 0.666;
+	//$scope.data.amount = 789.00 * 0.666;
 })
 
 .controller('SettingCtrl', function($state, $scope){
