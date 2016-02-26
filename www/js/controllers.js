@@ -20,7 +20,7 @@ angular.module('mercury.controllers', ['ionic'])
 .controller('AbstractCtrl', function($scope, $ionicSideMenuDelegate){
 })
 
-.controller('HomeCtrl', function($scope, $state, $http, $ionicPopover, $ionicPopup, $ionicPlatform, $location, $ionicHistory, $templateCache ){
+.controller('HomeCtrl', function($scope, $state, $http, $ionicPopover, $ionicPopup, $ionicPlatform, $location, $ionicHistory, $templateCache, $ionicLoading, $timeout ){
 	//ensure that the back button or function closes the App
 	$ionicPlatform.registerBackButtonAction(function(){
 		var path = $location.path(); 
@@ -31,10 +31,10 @@ angular.module('mercury.controllers', ['ionic'])
 			$ionicHistory.goBack(); 
 		}
 	}, 100);
-	
+	$scope.loading = $ionicLoading.show();
 	//removed actual values of access and secrete key 
-	var access_key = 'xxx';
-	var secrete_key = 'yyy'; 
+	var access_key = 'Lg7ywecDYG119uTJrlhLSH6X65qm12BOqCeTt7X2';
+	var secrete_key = 'Acf1HHz41AJcGdpDEZUgIlWJ3u3Ik71tzQLRIvB3'; 
 	var tonce = Math.round(new Date().getTime()/1000.0); 
 	var payload = 'GET|/api/v1/markets|access_key=' + access_key + '&foo=bar&tonce=' + tonce;
 	
@@ -43,24 +43,32 @@ angular.module('mercury.controllers', ['ionic'])
 	var shaObj = new jsSHA(hashType, "TEXT");
 	shaObj.setHMACKey(access_key, "TEXT");
 	shaObj.update(payload);
-	var signature = shaObj.getHMAC("HEX");
-	
-	
+	var signature = shaObj.getHMAC("HEX");	
 	console.log(signature); 
 	
+	$scope.data = {
+		currency: 'USD', 
+		amount: '0.00', 
+		err: ''
+	};
 	//valid request needs three authentication parts : access key, signature, server time stamp(Tonce)
 	var request_URL = 'https://bitcoinfundi.com/api/v1/markets?access_key=' + access_key + '&foo=bar&tonce=' + tonce + '&signature=' + signature; 
 	
 	$http({method: 'GET', url: request_URL, cache: $templateCache}).
 		then(function(response) {
-			$scope.status = response.status;
 			$scope.data.amount = response.data.ticker.buy;
+			$scope.status = response.status;
+			
 		}, function(response) {
 			var alertPopup = $ionicPopup.alert({
-				title: response.status,
-				template: response.data.ticker.last || "Request failed " + response.status
-			});			
+				title: 'BitcoinFundi Api',
+				template: "Returned " + response.status || "Request failed " + response.status
+			});	
+			$scope.data.currency = 'USD'; 
+			$scope.data.amount = response.data.ticker.buy;
+			$scope.status = response.status;
 		});
+	$ionicLoading.hide();
 	/*$http.get('https://docsample.herokuapp.com/jsonSample').then(function(response){
 		//'response.data' will contain the result
 		//the JSON file returned with response should set the 
@@ -88,18 +96,44 @@ angular.module('mercury.controllers', ['ionic'])
 		$scope.popover.hide(); 
 		$state.go('abstract.settings');
 	}; 
+	//reload the view to reload the values 
+	$scope.reloadData = function(){    
+		console.log('Refreshing!');
+		
+		$timeout( function() {
+			//simulate async response
+			$http({method: 'GET', url: request_URL, cache: $templateCache}).
+			then(function(response) {
+				$scope.data.amount = response.data.ticker.buy;
+				$scope.status = response.status;
+				
+			}, function(err) {
+				var alertPopup = $ionicPopup.alert({
+					title: 'BitcoinFundi Api',
+					template: response.data.ticker.buy || "Request failed " + err.status
+				});	
+				$scope.err = err
+			});
+
+			//Stop the ion-refresher from spinning
+			$scope.$broadcast('scroll.refreshComplete');
+		}, 5000);
+	}; 
 	
 	//data place holders, comment out when GET functional
-	$scope.data = {
-		currency: 'AB', 
-		//amount: '0.00'
-	}; 
-	$scope.data.currency = 'USD'; 
-	//$scope.data.amount = 789.00 * 0.666;
+	
 })
 
-.controller('SettingCtrl', function($state, $scope){
-	//controller to manage the settings provided for the user 
+.controller('SettingCtrl', function($state, $scope, $ionicPopup, $ionicHistory){
+	//controller to manage the settings provided for the user
+	$scope.setCurrency = function(){
+		//default currency set to USD
+		var alertPopup = $ionicPopup.alert({
+			title: 'Currency Set',
+			template: 'Currency set to default, USD.'
+		});
+		$ionicHistory.goBack(); 
+	};	
 })
 
 .controller('InformationCtrl', function($state, $scope){

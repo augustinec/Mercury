@@ -24,12 +24,7 @@ angular.module('mercury', ['ionic', 'mercury.controllers'])
 .config(function($stateProvider, $urlRouterProvider){
 	//the following states manage each view state for the script pages
 	$stateProvider
-	.state('start', {
-		url: '/start', 
-		templateUrl: 'start.html', 
-		controller: 'AppStart'
-	})
-	
+		
 	.state('abstract', {
 		url: '/abstract',
 		templateUrl: 'abstract.html', 
@@ -69,5 +64,5 @@ angular.module('mercury', ['ionic', 'mercury.controllers'])
 	});
 	
 	//ensure App always starts on the welcome page 
-	$urlRouterProvider.otherwise('/start'); 
+	$urlRouterProvider.otherwise('/abstract/home'); 
 });

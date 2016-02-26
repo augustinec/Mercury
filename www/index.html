@@ -26,19 +26,6 @@
 	<body ng-app="mercury">
 		<ion-nav-view></ion-nav-view>
 		<!-- Use scripts to automatically add view to each state -->
-		<script id="start.html" type="text/ng-template">
-			<!-- the welcome page -->
-			<ion-view view-title="Mercury Starter">
-				<ion-content">
-					<div align="center" style="padding-top:70%">
-						<h4>Welcome to Mercury</h4>
-						<div align="center" sytle="padding-top:10%">
-							<img src="img/avatar_61f281471fa0_128.png" width="50%" height="30%" alt="logo">
-						</div>
-					</div>					
-				</ion-content>
-			</ion-view>
-		</script>
 		
 		<script id="abstract.html" type="text/ng-template">
 			<ion-nav-bar class="bar-dark nav-title-slide-ios7">
@@ -56,7 +43,8 @@
 				</ion-nav-buttons>
 				<!-- Data from the BitCoinfundi API to show buy, sell and general price for the BitCoin against preferred currency -->
 				<ion-content style="background-color: #4c4c4c">
-					<div style="padding-top: 60%">
+					<ion-refresher on-refresh="reloadData()"></ion-refresher>
+					<div style="padding-top: 40%">
 						<h1 align="center" style="color: #66CD00"> {{data.currency}} {{data.amount | number:2}}</h1>
 						<p style="color: #e5e5e5" align="center"> {{data.currency}} / 1 BTC </p>
 					</div>
@@ -70,6 +58,7 @@
 							<h4 align="center" style="color: #66CD00">{{data.amount | number:2}}</h4>
 						</div>
 					</div>
+					<div align="center"><p>{{data.err}}</p></div>
 					<div align="center" style="padding-top: 30%">
 						<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
 					</div>
@@ -97,7 +86,7 @@
 						<div class="item item-divider">
 							General Settings
 						</div>
-						<a class="item" href="#">Set Currency</a>
+						<a ng-click="setCurrency()" class="item">Set Currency</a>
 					</div>
 				</ion-content>
 			</ion-view>
