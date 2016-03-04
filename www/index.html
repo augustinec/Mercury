@@ -45,22 +45,24 @@
 				<ion-content style="background-color: #4c4c4c">
 					<!-- Refresh the view and recolect data from server -->
 					<ion-refresher on-refresh="reloadData()"></ion-refresher>
-					<div style="padding-top: 40%">
-						<h1 align="center" style="color: #66CD00"> {{data.currency}} {{market.last.last}}</h1>
-						<p style="color: #e5e5e5" align="center"> {{data.currency}} / 1 BTC </p>
-					</div>
-					<div class="row row-center" style="padding-top: 3%">
-						<div class="col">
-							<p style="color: #e5e5e5" align="center" >Buy At Price:</p>
-							<h4 align="center" style="color: #66CD00">{{market.buy.buy}}</h4>
+					<div ng-repeat="info in info" >					
+						<div style="padding-top: 40%">
+							<h1 align="center" style="color: #66CD00"> {{data.currency}} {{info.name}}</h1>
+							<p style="color: #e5e5e5" align="center"> {{data.currency}} / 1 BTC </p>
 						</div>
-						<div class="col" >
-							<p style="color: #e5e5e5" align="center">Sell At Price:</p>
-							<h4 align="center" style="color: #66CD00">{{market.sell.sell}}</h4>
+						<div class="row row-center" style="padding-top: 3%">
+							<div class="col">
+								<p style="color: #e5e5e5" align="center" >Buy At Price:</p>
+								<h4 align="center" style="color: #66CD00">{{info.id}}</h4>
+							</div>
+							<div class="col" >
+								<p style="color: #e5e5e5" align="center">Sell At Price:</p>
+								<h4 align="center" style="color: #66CD00">{{info.name}}</h4>
+							</div>
 						</div>
-					</div>
-					<div align="center" style="padding-top: 30%">
-						<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
+						<div align="center" style="padding-top: 30%">
+							<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
+						</div>
 					</div>
 				</ion-content>
 			</ion-view>			
@@ -116,7 +118,7 @@
 						<div class="item item-text-wrap" style="background-color: #d8d8d8">
 							<h2> Connect With Us </h2>
 							<div class="row">
-								<div class="col" align="center" > <a href="https://www.facebook.com/BitFinance"><i class="icon ion-social-facebook"></i></a> </div>
+								<div class="col" align="center" > <a href="#" onclick="window.open('https://www.facebook.com/BitFinance', '_system', 'location=yes'); return false;"><i class="icon ion-social-facebook"></i></a> </div>
 								<div class="col"> <a href="https://www.linkedin.com/company/bitfinance/"><i class="icon ion-social-linkedin"></i></a> </div>
 								<div class="col"> <a href="https://www.youtube.com/c/BitfinanceZw"><i class="icon ion-social-youtube"></i></a> </div>
 								<div class="col"> <a href="https://twitter.com/BitcoinFundi"><i class="icon ion-social-twitter"></i></a> </div>

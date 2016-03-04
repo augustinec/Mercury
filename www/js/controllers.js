@@ -39,12 +39,9 @@ angular.module('mercury.controllers', ['ionic'])
 	$http.get(request_URL).
 	then(function(response) {
 		console.log('Request successfull');	
-		//set the display values 
-		$scope.market = {
-			buy : response.data, 
-			sell : response.data, 
-			last : response.data
-		}; 
+		console.log(response);
+		//set the display values   
+		$scope.info = response.data;  
 	}, function(err) {
 		console.error('ERR', err); 			
 	});
@@ -89,12 +86,7 @@ angular.module('mercury.controllers', ['ionic'])
 			then(function(response) {
 				console.log('Request successfull');	
 				//set the display values
-				//use function to format the string JSON.parse(response); 
-				$scope.market = {
-					buy : response.data.id, 
-					sell : response.data, 
-					last : response.data
-				}; 
+				$scope.info = response.data;
 				var alertPopup = $ionicPopup.alert({
 					title: 'New Prices',
 					template: 'Refresh complete.'
