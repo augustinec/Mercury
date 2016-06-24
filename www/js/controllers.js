@@ -18,30 +18,18 @@ angular.module('mercury.controllers', ['ionic'])
 	$scope.data = {
 		//variable to set the currency 
 		currency: 'USD'
-	};
-	//valid request needs three authentication parts : access key, signature, server time stamp(Tonce)
+	};	
 	
-	//access values and variables 
-	var accessKey = "Lg7ywecDYG119uTJrlhLSH6X65qm12BOqCeTt7X2";
-	var secrete_key = "Acf1HHz41AJcGdpDEZUgIlWJ3u3Ik71tzQLRIvB3"; 
-	var t_stamp = Math.round(new Date().getTime()/1.0); //the tonce ( NB: server time stamp )
-	var payload = "GET|/api/v1/markets|access_key=" + accessKey + "&foo=bar&tonce=" + t_stamp;
-	
-	//compute signature from the secrete key and payload. ( NB:use HMAC SHA-256 )	
-	var shaObj = new jsSHA("SHA-256", "TEXT");
-	shaObj.setHMACKey(secrete_key, "TEXT");
-	shaObj.update(payload);
-	var hashOut = shaObj.getHMAC("HEX");	
-	
-	var request_URL =  "https://bitcoinfundi.com/api/v1/markets?access_key=" + accessKey + "&foo=bar&tonce=" + t_stamp + "&signature=" + hashOut; 
-	
+	$scope.result = '';
+	//the request string to the API 
+	var request_URL = "https://bitcoinfundi.com/api/v1/tickers"; 
 	
 	$http.get(request_URL).
 	then(function(response) {
 		console.log('Request successfull');	
-		console.log(response);
 		//set the display values   
-		$scope.info = response.data;  
+		$scope.result = response.data.btcusd.ticker;  
+		//console.log($scope.result);
 	}, function(err) {
 		console.error('ERR', err); 			
 	});
@@ -68,25 +56,13 @@ angular.module('mercury.controllers', ['ionic'])
 	$scope.reloadData = function(){    
 		console.log('Refreshing data !');		
 		$timeout( function() {
-			//recompute the request
-			//access values and variables 
-			var accessKey = "Lg7ywecDYG119uTJrlhLSH6X65qm12BOqCeTt7X2";
-			var secrete_key = "Acf1HHz41AJcGdpDEZUgIlWJ3u3Ik71tzQLRIvB3"; 
-			var t_stamp = Math.round(new Date().getTime()/1.0); //the tonce ( NB: server time stamp )
-			var payload = "GET|/api/v1/markets|access_key=" + accessKey + "&foo=bar&tonce=" + t_stamp;
-
-			//compute signature from the secrete key and payload. ( NB:use HMAC SHA-256 )	
-			var shaObj = new jsSHA("SHA-256", "TEXT");
-			shaObj.setHMACKey(secrete_key, "TEXT");
-			shaObj.update(payload);
-			var hashOut = shaObj.getHMAC("HEX");	
-
-			var request_URL =  "https://bitcoinfundi.com/api/v1/markets?access_key=" + accessKey + "&foo=bar&tonce=" + t_stamp + "&signature=" + hashOut; 
+			//make a new request to check the price 
+			var request_URL = "https://bitcoinfundi.com/api/v1/tickers";
 			$http.get(request_URL).
 			then(function(response) {
 				console.log('Request successfull');	
-				//set the display values
-				$scope.info = response.data;
+				$scope.result = response.data.btcusd.ticker;  
+				//console.log($scope.result);
 				var alertPopup = $ionicPopup.alert({
 					title: 'New Prices',
 					template: 'Refresh complete.'

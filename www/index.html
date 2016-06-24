@@ -18,9 +18,7 @@
 		
 		<!-- your app's js -->
 		<script src="js/app.js"></script>
-		<script src="js/controllers.js"></script>
-		<script src="js/sha256.js"></script> <!-- First Option Library -->
-		<script src="js/jssha/src/sha.js"></script> <!-- Second Option Library -->
+		<script src="js/controllers.js"></script>		
 		
 	</head>
 	<body ng-app="mercury">
@@ -45,22 +43,22 @@
 				<ion-content style="background-color: #4c4c4c">
 					<!-- Refresh the view and recolect data from server -->
 					<ion-refresher on-refresh="reloadData()"></ion-refresher>
-					<div ng-repeat="info in info" >					
-						<div style="padding-top: 40%">
-							<h1 align="center" style="color: #66CD00"> {{data.currency}} {{info.name}}</h1>
+					<div>					
+						<div style="padding-top: 20%">
+							<h1 align="center" style="color: #66CD00"> {{data.currency}} BTC</h1>
 							<p style="color: #e5e5e5" align="center"> {{data.currency}} / 1 BTC </p>
 						</div>
-						<div class="row row-center" style="padding-top: 3%">
+						<div class="row row-center" style="padding-top: 30%">
 							<div class="col">
-								<p style="color: #e5e5e5" align="center" >Buy At Price:</p>
-								<h4 align="center" style="color: #66CD00">{{info.id}}</h4>
+								<p style="color: #e5e5e5" align="center" >Buy At Price(USD):</p>
+								<h4 align="center" style="color: #66CD00">{{result.buy | currency}}</h4>
 							</div>
 							<div class="col" >
-								<p style="color: #e5e5e5" align="center">Sell At Price:</p>
-								<h4 align="center" style="color: #66CD00">{{info.name}}</h4>
+								<p style="color: #e5e5e5" align="center">Sell At Price(USD):</p>
+								<h4 align="center" style="color: #66CD00">{{result.sell | currency}}</h4>
 							</div>
 						</div>
-						<div align="center" style="padding-top: 30%">
+						<div align="center" style="padding-top: 10%">
 							<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
 						</div>
 					</div>
@@ -119,10 +117,10 @@
 							<h2> Connect With Us </h2>
 							<div class="row">
 								<div class="col" align="center" > <a href="#" onclick="window.open('https://www.facebook.com/BitFinance', '_system', 'location=yes'); return false;"><i class="icon ion-social-facebook"></i></a> </div>
-								<div class="col"> <a href="https://www.linkedin.com/company/bitfinance/"><i class="icon ion-social-linkedin"></i></a> </div>
-								<div class="col"> <a href="https://www.youtube.com/c/BitfinanceZw"><i class="icon ion-social-youtube"></i></a> </div>
-								<div class="col"> <a href="https://twitter.com/BitcoinFundi"><i class="icon ion-social-twitter"></i></a> </div>
-								<div class="col"> <a href="http://bitfiance.us10.list-manage1.com/subscribe?u=b6a8183fd363d9c53cce8758a&id=699df77ecd"><i class="icon ion-android-mail"></i></a> </div>
+								<div class="col"> <a href="#" onclick="window.open('https://www.linkedin.com/company/bitfinance/', '_system', 'location=yes'); return false;"><i class="icon ion-social-linkedin"></i></a> </div>
+								<div class="col"> <a href="#" onclick="window.open('https://www.youtube.com/c/BitfinanceZw', '_system', 'location=yes'); return false;"><i class="icon ion-social-youtube"></i></a> </div>
+								<div class="col"> <a href="#" onclick="window.open('https://twitter.com/BitcoinFundi', '_system', 'location=yes'); return false;"><i class="icon ion-social-twitter"></i></a> </div>
+								<div class="col"> <a href="#" onclick="window.open('http://bitfiance.us10.list-manage1.com/subscribe?u=b6a8183fd363d9c53cce8758a&id=699df77ecd', '_system', 'location=yes'); return false;"><i class="icon ion-android-mail"></i></a> </div>
 							</div>
 						</div>
 					</div>
