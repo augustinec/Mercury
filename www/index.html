@@ -18,7 +18,9 @@
 		
 		<!-- your app's js -->
 		<script src="js/app.js"></script>
-		<script src="js/controllers.js"></script>		
+		<script src="js/controllers.js"></script>
+		<script src="js/highcharts.js"></script>
+		<script src="js/highcharts-ng.js"></script>	
 		
 	</head>
 	<body ng-app="mercury">
@@ -43,24 +45,28 @@
 				<ion-content style="background-color: #4c4c4c">
 					<!-- Refresh the view and recolect data from server -->
 					<ion-refresher on-refresh="reloadData()"></ion-refresher>
-					<div>					
-						<div style="padding-top: 20%">
-							<h1 align="center" style="color: #66CD00"> {{data.currency}} BTC</h1>
-							<p style="color: #e5e5e5" align="center"> {{data.currency}} / 1 BTC </p>
+					<div align="center" style="padding-top: 10%">
+						<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
+					</div>
+					<div class="card" style="background-color: #595959">					
+						<div>
+							<h4 align="center" style="color: #66CD00"> {{data.currency}} / 1BTC</h4>
 						</div>
-						<div class="row row-center" style="padding-top: 30%">
+						<div class="row row-center" style="padding-bottom: 10%">
 							<div class="col">
-								<p style="color: #e5e5e5" align="center" >Buy At Price(USD):</p>
+								<p style="color: #e5e5e5" align="center" >Buy (USD):</p>
 								<h4 align="center" style="color: #66CD00">{{result.buy | currency}}</h4>
 							</div>
 							<div class="col" >
-								<p style="color: #e5e5e5" align="center">Sell At Price(USD):</p>
+								<p style="color: #e5e5e5" align="center">Sell (USD):</p>
 								<h4 align="center" style="color: #66CD00">{{result.sell | currency}}</h4>
 							</div>
 						</div>
-						<div align="center" style="padding-top: 10%">
-							<img src="img/logo-white-small.png" width="30%" height="10%" alt="bitFundi">
-						</div>
+						
+					</div>
+					
+					<div class="card" style="background-color: #595959">
+						<highchart id="chart1" config="chartConfig" class="span10"></highchart>
 					</div>
 				</ion-content>
 			</ion-view>			
@@ -68,11 +74,12 @@
 		
 		<script id="popover.html" type="text/ng-template">
 			<!-- Menu provided to user for Settings and Information Pages -->
-			<ion-popover-view style="height: 110px">
+			<ion-popover-view style="height: 165px">
 				<ion-content>
 					<div class="list">
 						<a ng-click="moveToInfo()" class="item" > Information</a>
 						<a ng-click="moveToSet()" class="item" > Settings</a>
+						<a ng-click="moveToCalc()" class="item" > Calculator</a>
 					</div>
 				</ion-content>
 			</ion-popover-view>
@@ -83,10 +90,12 @@
 			<ion-view title="Settings" hide-nav-bar="true">
 				<ion-content >
 					<div class="list">
-						<div class="item item-divider">
+						<div class="item item-divider" style="background-color: #595959">
 							General Settings
 						</div>
-						<a ng-click="setCurrency()" class="item">Set Currency</a>
+						<div class="card">
+							<a ng-click="setCurrency()" class="item">Set Currency</a>
+						</div>
 					</div>
 				</ion-content>
 			</ion-view>
@@ -102,9 +111,9 @@
 				<ion-nav-back-button class="button-clear">
 					<i class="icon ion-ios7-arrow-back"></i>
 				</ion-nav-back-button>
-				<ion-content style="background-color: #e5e5e5">
+				<ion-content style="background-color: #4c4c4c">
 					<br/>
-					<h5 align="center"> BitcoinFundi is a Bitcoin exchange built for Africa </h5>					
+					<h5 style="color: #e5e5e5" align="center"> BitcoinFundi is a Bitcoin exchange built for Africa </h5>					
 					<div class="card" >
 						<div class="item item-text-wrap" style="background-color: #d8d8d8">
 							<h2> Our Mission </h2>
@@ -125,6 +134,35 @@
 						</div>
 					</div>
 					
+				</ion-content>
+			</ion-view>
+		</script>
+		
+		<script id="calculator.html" type="text/ng-template">
+			<!-- Information about mercury, basically the BitCoinfundi application-->
+			<ion-view title="BitCoin Calculator">
+				<ion-nav-back-button class="button-clear">
+					<i class="icon ion-ios7-arrow-back"></i>
+				</ion-nav-back-button>
+				<ion-content ng-controller="CalculatorCtrl" style="background-color: #4c4c4c">
+					<div class="card">
+						<label class="item item-input">
+							<i class="icon ion-social-bitcoin-outline placeholder-icon" style="font-size: 32px"></i>
+							<input type="number" placeholder="USD/1 BTC" style="padding-bottom: 5%;padding-top: 5%; font-size: 20px" ng-change="calculate()" ng-model="price"/>
+						</label>
+					</div>
+					<div class="card">
+						<label class="item item-input">
+							<i class="icon ion-social-bitcoin placeholder-icon" style="font-size: 32px"></i>
+							<input type="number" placeholder="BitCoins" style="padding-bottom: 5%;padding-top: 5%; font-size: 20px" ng-change="calculate()" ng-model="coins"/>
+						</label>
+					</div>
+					<div class="card">
+						<label class="item item-input">
+							<i class="icon ion-social-usd-outline placeholder-icon" style="font-size: 32px"></i>
+							<input type="number" placeholder="USD" style="padding-bottom: 5%;padding-top: 5%; font-size: 20px" ng-model="dolla" step="0.01"/>
+						</label>
+					</div>
 				</ion-content>
 			</ion-view>
 		</script>

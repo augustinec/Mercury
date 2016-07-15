@@ -61,6 +61,16 @@ angular.module('mercury', ['ionic', 'mercury.controllers'])
 				controller: 'InformationCtrl'
 			}
 		}
+	})
+	
+	.state('abstract.calculator', {
+		url: '/calculator', 
+		views: {
+			'abstract': {
+				templateUrl: 'calculator.html',
+				controller: 'CalculatorCtrl'
+			}
+		}
 	});
 	
 	//ensure App always starts on the welcome page 
